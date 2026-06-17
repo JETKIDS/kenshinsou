@@ -305,14 +305,15 @@ h2 {
 
 @media (min-width: 860px) {
   .app-shell {
-    width: min(100%, 1040px);
-    grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+    width: min(100%, 1180px);
+    grid-template-columns: minmax(0, 1.3fr) minmax(300px, 0.7fr);
     align-items: start;
     padding: 32px;
   }
 
   .exercise-video {
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 9 / 14;
+    max-height: 78vh;
   }
 
   .workout-actions {
@@ -320,6 +321,6 @@ h2 {
   }
 
   .finished-panel {
-    min-height: min(48vh, 420px);
+    min-height: min(78vh, 720px);
   }
 }
