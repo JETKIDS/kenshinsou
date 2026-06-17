@@ -25,3 +25,6 @@ movie/
 *.njsproj
 *.sln
 *.sw?
+
+.vercel
+.env*.local
