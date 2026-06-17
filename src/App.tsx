@@ -2,74 +2,13 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
 import { exercises } from './data/exercises'
 import { getInitialWorkout } from './lib/getInitialWorkout'
+import { createPracticeBgm, type PracticeBgm } from './lib/practiceBgm'
 import { selectWorkout } from './lib/selectWorkout'
 
 const workoutSize = 5
 const previewSeconds = 5
 
 type PlaybackPhase = 'ready' | 'preview' | 'playing' | 'finished'
-type PracticeBgm = {
-  stop: () => void
-}
-
-type AudioContextWindow = Window & {
-  webkitAudioContext?: typeof AudioContext
-}
-
-function createPracticeBgm(): PracticeBgm | null {
-  const audioWindow = window as AudioContextWindow
-  const AudioContextConstructor = window.AudioContext ?? audioWindow.webkitAudioContext
-
-  if (!AudioContextConstructor) {
-    return null
-  }
-
-  const context = new AudioContextConstructor()
-  const masterGain = context.createGain()
-  const phraseTimer = window.setInterval(playPhrase, 3200)
-  const scale = [261.63, 293.66, 329.63, 392, 440, 392, 329.63, 293.66]
-  let step = 0
-
-  masterGain.gain.value = 0.045
-  masterGain.connect(context.destination)
-  playPhrase()
-
-  function playTone(frequency: number, startsAt: number, duration: number) {
-    const oscillator = context.createOscillator()
-    const toneGain = context.createGain()
-
-    oscillator.type = 'sine'
-    oscillator.frequency.setValueAtTime(frequency, startsAt)
-    toneGain.gain.setValueAtTime(0.001, startsAt)
-    toneGain.gain.linearRampToValueAtTime(0.75, startsAt + 0.08)
-    toneGain.gain.exponentialRampToValueAtTime(0.001, startsAt + duration)
-
-    oscillator.connect(toneGain)
-    toneGain.connect(masterGain)
-    oscillator.start(startsAt)
-    oscillator.stop(startsAt + duration + 0.05)
-  }
-
-  function playPhrase() {
-    const startsAt = context.currentTime + 0.04
-    const root = scale[step % scale.length]
-    const third = scale[(step + 2) % scale.length]
-    const fifth = scale[(step + 4) % scale.length]
-
-    playTone(root, startsAt, 2.8)
-    playTone(third, startsAt + 0.08, 2.5)
-    playTone(fifth / 2, startsAt + 0.16, 2.6)
-    step += 1
-  }
-
-  return {
-    stop: () => {
-      window.clearInterval(phraseTimer)
-      masterGain.gain.setTargetAtTime(0.001, context.currentTime, 0.08)
-      window.setTimeout(() => void context.close(), 220)
-    },
-  }
-}
 
 function App() {
   const initialWorkout = useMemo(() => getInitialWorkout(exercises, workoutSize), [])
