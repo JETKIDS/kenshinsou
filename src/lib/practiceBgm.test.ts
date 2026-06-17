@@ -9,8 +9,8 @@ describe('exerciseBgmPattern', () => {
     )
   })
 
-  test('keeps generated exercise music at a comfortable app volume', () => {
-    expect(exerciseBgmPattern.masterVolume).toBeGreaterThan(0.03)
-    expect(exerciseBgmPattern.masterVolume).toBeLessThanOrEqual(0.08)
+  test('keeps generated exercise music loud enough for workout playback', () => {
+    expect(exerciseBgmPattern.masterVolume).toBeGreaterThanOrEqual(0.1)
+    expect(exerciseBgmPattern.masterVolume).toBeLessThanOrEqual(0.13)
   })
 })

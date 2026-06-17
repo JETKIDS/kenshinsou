@@ -17,7 +17,7 @@ export const exerciseBgmPattern: {
   parts: BgmPart[]
 } = {
   loopSeconds: 1.6,
-  masterVolume: 0.055,
+  masterVolume: 0.11,
   parts: [
     { role: 'kick', offsets: [0, 0.8] },
     { role: 'hat', offsets: [0.2, 0.6, 1, 1.4] },
